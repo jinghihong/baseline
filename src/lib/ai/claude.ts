@@ -44,6 +44,13 @@ export function hasClaude(): boolean {
   return !!getWorkspace().ai.apiKey;
 }
 
+/**
+ * Where requests go. Unset in production builds, so the SDK uses https://api.anthropic.com.
+ * Set VITE_ANTHROPIC_BASE_URL at build or dev time to route through a company proxy, or to the local mock
+ * server (npm run mock:claude) to develop and test the AI screens without a real key.
+ */
+const BASE_URL = (import.meta.env.VITE_ANTHROPIC_BASE_URL as string | undefined) || undefined;
+
 let sdk: Promise<typeof import("@anthropic-ai/sdk")> | null = null;
 const loadSdk = () => (sdk ??= import("@anthropic-ai/sdk"));
 
@@ -54,7 +61,7 @@ export async function streamClaude({ system, messages, onText, signal, maxTokens
   const model = chosen || DEFAULT_MODEL;
   const mod = await loadSdk();
   const AnthropicClient = mod.default;
-  const client = new AnthropicClient({ apiKey, dangerouslyAllowBrowser: true, maxRetries: 2 });
+  const client = new AnthropicClient({ apiKey, dangerouslyAllowBrowser: true, maxRetries: 2, ...(BASE_URL ? { baseURL: BASE_URL } : {}) });
 
   // Server-side fallback re-runs a declined request on a suitable model inside the same call.
   // Claude Haiku 5.5 has no server-side fallback, so it is sent without one.
@@ -105,7 +112,7 @@ export async function testConnection(): Promise<{ ok: true; model: string } | { 
 function toAiError(err: unknown, A: typeof Anthropic): AiError {
   if (err instanceof AiError) return err;
   if (err instanceof A.AuthenticationError || err instanceof A.PermissionDeniedError) {
-    return new AiError("auth", "The API key was rejected. Check it in Settings.");
+    return new AiError("auth", "The API key was rejected. Check that it is complete and still active in the Anthropic Console.");
   }
   if (err instanceof A.RateLimitError) return new AiError("rate_limit", "Claude is rate limited right now. Wait a moment and try again.");
   if (err instanceof A.BadRequestError) return new AiError("bad_request", `Claude could not process the request: ${err.message}`);

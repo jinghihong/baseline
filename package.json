@@ -16,7 +16,8 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "data": "node scripts/fetch-data.mjs",
-    "check": "npm run typecheck && npm test"
+    "check": "npm run typecheck && npm test",
+    "mock:claude": "node scripts/mock-anthropic.mjs"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^1.8.0",

@@ -212,6 +212,11 @@ function AiSettings({ ai }: { ai: Workspace["ai"] }) {
                 Save key
               </Button>
             </form>
+            {draft.trim() && !draft.trim().startsWith("sk-ant-") && (
+              <p className="mt-1.5 text-[12.5px] text-warn-ink" role="status">
+                Anthropic API keys usually start with "sk-ant-". Check that you copied the whole key.
+              </p>
+            )}
           </Field>
         )}
 

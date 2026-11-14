@@ -26,6 +26,7 @@ What is checked before a release, and how. Automated checks run in CI on every p
 | Workspace: export (API key stripped even when one is saved), reset with confirmation, import with confirmation, malformed file shows an error | Pass |
 | Ask Baseline without a key: built-in analyst answers with sources; `?q=` from the command palette | Pass |
 | Browser can reach `api.anthropic.com` from the app's origin (CORS) and read its responses | Pass |
+| AI flow through the real UI against the local mock API (`npm run mock:claude`): save key, Test connection ("Connected. Claude replied using claude-opus-5-5"), Ask Baseline streams a reply with sources, request carries model, effort and server-side fallback, rejected key shows a clear error, remove key | Pass |
 | Live Claude reply with a real API key | Needs the owner's key (Settings → AI connection → Test connection) |
 
 ## After every deploy

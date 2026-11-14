@@ -70,6 +70,18 @@ Short version (full detail on the in-app Methodology page and in [`docs/methodol
 
 Baseline works fully without AI: a built-in analyst answers questions from the data. To use Claude, add your own Anthropic API key in **Settings**. The key stays in your browser and is sent only to the Anthropic API. Requests use `claude-opus-5-5` by default with server-side refusal fallback enabled.
 
+To develop or demo the AI screens without a key, run the local mock of the Messages API and point the dev build at it:
+
+```bash
+npm run mock:claude
+```
+
+```bash
+VITE_ANTHROPIC_BASE_URL=http://localhost:5180 npm run dev
+```
+
+Then save any key starting with `sk-ant-` in Settings; the mock streams canned replies in the real API format. `VITE_ANTHROPIC_BASE_URL` can also route production builds through a company proxy.
+
 ## Run it locally
 
 ```bash
