@@ -17,17 +17,33 @@ const THEMES = [
 // Title patterns decide a grant's themes. Full-text search hits alone are noisy (a health research grant can
 // match "water"), so search themes are only a fallback when the title matches nothing.
 const TITLE_THEME = {
-  transportation: /transport|transit|bridge|highway|\broads?\b|street|traffic|\brail|\bbus(es)?\b|bicycl|pedestrian|mobility|airport|safe streets|vehicle/i,
+  transportation: /\btransportation\b|\btransport\b|\btransit\b|\bbridges?\b(?!\s*(gaps?|the|to|between)\b)|highway|\broads?\b|street|\btraffic\b|\brail|\bbus(es)?\b|bicycl|pedestrian|mobility|airport|safe streets/i,
   water: /water|sewer|storm ?water|drinking|lead service|irrigation/i,
   resilience: /resilien|hazard|mitigation|flood|disaster|climate|wildfire|hurricane|\bBRIC\b/i,
   housing: /housing|homeless|community development|lead hazard|\bCDBG\b|neighborhood|\brent/i,
   energy: /energy|electric|decarboni|solar|efficien|clean|emission|\bEV\b|charging/i,
-  safety: /law enforcement|police|policing|public safety|justice|crime|violence|court|correction|prosecut|firefight|\bfire\b|emergency|\b911\b|victim|security/i,
+  safety: /law enforcement|police|policing|public safety|justice|crime|violence|court|correction|prosecut|firefight|\bfire\b|emergency|\b911\b|victim|homeland security|cybersecurity/i,
   health: /health|opioid|substance|overdose|mental|child ?care|maternal|\bHIV\b|disease|nutrition|medical/i,
   parks: /\bparks?\b|recreation|forest|\btrees?\b|librar|\barts?\b|museum|humanities|historic|outdoor/i,
   digital: /broadband|cyber|digital|\bdata\b|technology|internet/i,
   workforce: /workforce|\bjobs?\b|employment|apprentice|economic development|brownfield|small business|training/i,
 };
+
+// Grants.gov titles arrive HTML-escaped, sometimes twice ("&amp;mdash;"). Decode to plain text.
+const ENTITIES = { amp: "&", lt: "<", gt: ">", quot: '"', apos: "'", nbsp: " ", mdash: "—", ndash: "–", rsquo: "’", lsquo: "‘", rdquo: "”", ldquo: "“", hellip: "…", eacute: "é", trade: "™", reg: "®" };
+export function decodeEntities(text) {
+  let s = String(text ?? "");
+  for (let i = 0; i < 3 && /&[a-z#0-9]+;/i.test(s); i++) {
+    s = s.replace(/&(#x[0-9a-f]+|#\d+|[a-z]+);/gi, (m, code) => {
+      if (code[0] === "#") {
+        const n = code[1] === "x" || code[1] === "X" ? parseInt(code.slice(2), 16) : parseInt(code.slice(1), 10);
+        return Number.isFinite(n) ? String.fromCodePoint(n) : m;
+      }
+      return ENTITIES[code.toLowerCase()] ?? m;
+    });
+  }
+  return s.replace(/\s+/g, " ").trim();
+}
 
 function themesFor(title, searchThemes) {
   const fromTitle = Object.keys(TITLE_THEME).filter((id) => TITLE_THEME[id].test(title));
@@ -75,8 +91,8 @@ export async function buildGrants() {
         byId.set(id, {
           id,
           number: h.number,
-          title: h.title,
-          agency: h.agencyName || h.agency || h.agencyCode,
+          title: decodeEntities(h.title),
+          agency: decodeEntities(h.agencyName || h.agency || h.agencyCode),
           agencyCode: h.agencyCode,
           status: h.oppStatus,
           openDate: toIso(h.openDate),
