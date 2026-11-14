@@ -4,7 +4,7 @@ _Research brief · November 2026_
 
 ## Summary
 
-New York City plans a $125.84 billion budget and a capital program of well over $100 billion with numbers it cannot fully trust. Its infrastructure report misses repair costs by half. Most capital projects end up later and more expensive than first planned, and the city's own reporting often hides by how much. Overtime is adopted far below what the city actually pays, every year.
+New York City plans a $125.84 billion budget and a capital program of well over $100 billion with numbers it cannot fully trust. Its infrastructure report missed one bridge repair's cost by half, and auditors found it misses structural problems too. Most capital projects end up later and more expensive than first planned, and the city's own reporting often hides by how much. Overtime is adopted far below what the city actually pays, every year.
 
 Baseline is software that gives a city's budget office and its council the same independent forecasts, built on the city's own data, with a source on every number. The budget office uses it to set budgets that hold. The council uses it to check them.
 
@@ -42,7 +42,7 @@ We rebuilt these findings from NYC Open Data to test whether software can see th
 - **Capital Projects Dashboard, May 2023 to May 2026.** Counting each budget ID once, 40% of projects now carry a budget above the first number the city published, adding $21.9 billion. Of the projects with a published completion forecast, 66% have had that date pushed back.
 - **Past projects as a reference class.** In the October 2023 capital project detail data (the same publication the State Comptroller reviewed), 52% of 4,694 projects over $250,000 had grown past their original budget and 41% had grown 20% or more. Together they went from $90.6 billion originally to $132.6 billion planned.
 - **Overtime.** Across the 15 agencies where the budget and payroll data line up, the FY2026 adopted overtime budget was $1.54 billion; the city paid $2.78 billion. The NYPD alone was adopted at $565 million and paid $1.05 billion.
-- **The Riverside Park test.** Priced the way Baseline prices projects, against 203 past NYC bridge projects weighted toward similar size, a $76 million estimate becomes $102 million at the median and $138 million at 80% confidence. The actual $149.9 million bid falls inside Baseline's 90% range. A planner would have known on day one that $76 million was very unlikely to hold.
+- **The Riverside Park test.** Priced the way Baseline prices projects, against 203 past NYC bridge projects weighted toward similar size, agency and borough, a $76 million estimate becomes $102 million at the median and $137 million at 80% confidence. The actual $149.9 million bid falls inside Baseline's 90% range. A planner would have known on day one that $76 million was very unlikely to hold.
 
 The pattern is the same everywhere: a single number is set once, never tested against what similar work has cost before, and then quietly re-based as reality arrives.
 
