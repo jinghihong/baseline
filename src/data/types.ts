@@ -168,6 +168,27 @@ export interface GrantsData {
   opportunities: GrantOpportunity[];
 }
 
+// ---- Forecaster backtest -------------------------------------------------------------------------
+export interface BacktestProject {
+  id: string;
+  name: string;
+  agency: string;
+  cls: string;
+  boro: string;
+  /** Original budget: at creation for test projects, as published for training projects. */
+  orig: number;
+  /** Planned total: final for test projects, as known in the training snapshot for training projects. */
+  current: number;
+  firstPub?: string;
+  lastPub?: string;
+  spentShare?: number;
+}
+export interface BacktestData {
+  meta: DatasetMeta & { trainingPub: string; lastPub: string; publications: string[]; doneThreshold: number };
+  train: BacktestProject[];
+  test: BacktestProject[];
+}
+
 // ---- Manifest -------------------------------------------------------------------------------------
 export interface Manifest {
   updatedAt: string;
@@ -182,6 +203,7 @@ export interface DatasetMap {
   demand: DemandData;
   council: CouncilCapitalData;
   grants: GrantsData;
+  backtest: BacktestData;
   manifest: Manifest;
 }
 
@@ -193,5 +215,6 @@ export const DATASET_FILES: Record<keyof DatasetMap, string> = {
   demand: "demand-311.json",
   council: "council-capital.json",
   grants: "grants.json",
+  backtest: "backtest.json",
   manifest: "manifest.json",
 };

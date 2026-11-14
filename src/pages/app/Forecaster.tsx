@@ -33,6 +33,7 @@ import { AIMS_FACTS } from "../../data/curated";
 import { useDataset } from "../../data/load";
 import { forecastFromData, ratioPercentile } from "../../engines/costForecast";
 import { BOROUGHS, ConfidenceBadge, ForecastBands, agencyOptions, classLabelMap, ratioChange } from "../../features/capital/shared";
+import { BacktestCard } from "../../features/capital/BacktestCard";
 import { date, duration, money, pct } from "../../lib/format";
 import { newId, updateWorkspace, useWorkspace } from "../../state/store";
 
@@ -352,6 +353,8 @@ export default function Forecaster() {
                 </Link>
                 .
               </Callout>
+
+              <BacktestCard classLabel={(id) => labels.get(id) ?? id} />
             </>
           )}
         </div>

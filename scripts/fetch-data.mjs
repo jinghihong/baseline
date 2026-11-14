@@ -7,6 +7,7 @@ import { buildBudget } from "./tasks/budget.mjs";
 import { buildReferenceClass, buildDashboard } from "./tasks/capital.mjs";
 import { buildDemand, buildCouncilCapital } from "./tasks/community.mjs";
 import { buildGrants } from "./tasks/grants.mjs";
+import { buildBacktest } from "./tasks/backtest.mjs";
 
 const TASKS = {
   budget: buildBudget,
@@ -15,6 +16,7 @@ const TASKS = {
   demand: buildDemand,
   council: buildCouncilCapital,
   grants: buildGrants,
+  backtest: buildBacktest,
 };
 
 const requested = process.argv.slice(2);

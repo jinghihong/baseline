@@ -47,7 +47,7 @@ All data is public and refreshed weekly by a GitHub Action ([`refresh-data.yml`]
 |---|---|---|
 | Expense Budget (`mwzb-yiwb`) | NYC Open Data | Adopted vs modified budgets, overtime budgets |
 | Citywide Payroll Data (`k397-673e`) | NYC Open Data | Overtime actually paid |
-| Capital Project Detail Data (`wa2y-rh4b`, `s7yh-frbm`) | NYC Open Data | Reference class for cost forecasting (Oct 2023, the publication the State Comptroller reviewed) |
+| Capital Project Detail Data (`wa2y-rh4b`, `s7yh-frbm`) | NYC Open Data | Reference class for cost forecasting (Oct 2023, the publication the State Comptroller reviewed) and the out-of-sample backtest (all 14 publications, 2019-2023) |
 | Capital Projects Dashboard (`fb86-vt7u`, `95tx-snak`) | NYC Open Data | Live watchlist with budget and schedule history |
 | 311 Service Requests (`erm2-nwe9`) | NYC Open Data | Demand trends and forecasts |
 | City Council Capital Budget (`t474-a92g`) | NYC Open Data | District awards |
@@ -60,6 +60,7 @@ Published figures (Comptroller reports, audits) live in [`src/data/curated.ts`](
 Short version (full detail on the in-app Methodology page and in [`docs/methodology.md`](docs/methodology.md)):
 
 - **Capital cost:** reference-class forecasting. Similar past projects (same asset class, weighted by size, agency and borough) give a distribution of final cost ÷ original budget. Your estimate × that distribution = P50/P80/P90.
+  - **Backtested out of sample:** trained only on April 2019 data and tested on 497 projects created later and since finished, 45% / 85% / 93% of final costs landed at or below P50 / P80 / P90 (targets 50 / 80 / 90). The city's original budget held for 40% of them; Baseline's P80 held for 85%. The Cost forecaster page reruns this test live.
 - **Overtime:** damped-trend smoothing of actual overtime paid, compared with the adopted budget.
 - **Under-budgeted lines:** each agency × object class is compared adopted vs modified over up to eight years; a line is flagged as chronic when it ends the year above adoption in at least 3 of every 4 years (5+ years of history), by a median of 20% or more.
 - **311 demand:** seasonal index + linear trend with an 80% band.

@@ -57,6 +57,24 @@ A new estimate is compared with what happened to similar past projects in the ci
 
 You can add your city's own completed projects in **Data & imports** to calibrate the forecaster.
 
+#### How accurate is it? An out-of-sample backtest
+
+To test the forecaster honestly, Baseline replays history without hindsight:
+
+1. **Train** only on the city's first Capital Project Detail Data publication (April 25, 2019): 4,817 projects as they looked then.
+2. **Test** on 497 projects that were created after that date (so the forecaster never saw them) and were at least 80% spent by their last appearance in the data.
+3. For each one, price its original budget with the April 2019 reference class, then check where its final cost landed.
+
+| | Target | Result |
+|---|---:|---:|
+| Final cost at or below P50 | 50% | 45% |
+| Final cost at or below P80 | 80% | 85% |
+| Final cost at or below P90 | 90% | 93% |
+
+The city's original budget held for **40%** of these finished projects. Baseline's recommended P80 budget held for **85%**. The ranges are well calibrated (the upper end is slightly cautious), and they are wide: in the typical case the P80 budget sits about twice the original estimate, because that is how widely NYC project outcomes vary.
+
+The Cost forecaster page reruns this test live in your browser every time the data refreshes, with results by project type. Caveats: the test set leans toward projects short enough to finish within four years, and "80% spent" is a proxy for finished.
+
 ### 311 demand
 
 Monthly forecasts use a seasonal index for each calendar month (each month's typical share of the year, from centered 12-month averages) and a linear trend fitted to the most recent 36 months after removing seasonality. The band is an 80% range from the trend's residuals.

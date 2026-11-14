@@ -82,11 +82,20 @@ function describe(d: Omit<DatasetMap, "manifest">): DatasetRow[] {
       fetchedAt: d.grants.meta.fetchedAt,
       task: "grants",
     },
+    {
+      key: "backtest",
+      name: "Forecaster backtest",
+      purpose: "Out-of-sample accuracy test for the cost forecaster (Cost forecaster, Methodology)",
+      rows: `${num(d.backtest.train.length)} training · ${num(d.backtest.test.length)} finished test projects`,
+      sources: d.backtest.meta.sources,
+      fetchedAt: d.backtest.meta.fetchedAt,
+      task: "backtest",
+    },
   ];
 }
 
 export default function Data() {
-  const { data, loading, error } = useDatasets(["budgetLines", "overtime", "capital", "reference", "demand", "council", "grants", "manifest"]);
+  const { data, loading, error } = useDatasets(["budgetLines", "overtime", "capital", "reference", "demand", "council", "grants", "backtest", "manifest"]);
   const rows = data ? describe(data) : [];
   return (
     <>

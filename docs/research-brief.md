@@ -42,6 +42,7 @@ We rebuilt these findings from NYC Open Data to test whether software can see th
 - **Capital Projects Dashboard, May 2023 to May 2026.** Counting each budget ID once, 40% of projects now carry a budget above the first number the city published, adding $21.9 billion. Of the projects with a published completion forecast, 66% have had that date pushed back.
 - **Past projects as a reference class.** In the October 2023 capital project detail data (the same publication the State Comptroller reviewed), 52% of 4,694 projects over $250,000 had grown past their original budget and 41% had grown 20% or more. Together they went from $90.6 billion originally to $132.6 billion planned.
 - **Overtime.** Across the 15 agencies where the budget and payroll data line up, the FY2026 adopted overtime budget was $1.54 billion; the city paid $2.78 billion. The NYPD alone was adopted at $565 million and paid $1.05 billion.
+- **Tested on finished projects.** Trained only on the city's April 2019 data, Baseline priced 497 projects created later and since finished. The city's original budget held for 40% of them; Baseline's recommended P80 budget held for 85%, close to its 80% target.
 - **The Riverside Park test.** Priced the way Baseline prices projects, against 203 past NYC bridge projects weighted toward similar size, agency and borough, a $76 million estimate becomes $102 million at the median and $137 million at 80% confidence. The actual $149.9 million bid falls inside Baseline's 90% range. A planner would have known on day one that $76 million was very unlikely to hold.
 
 The pattern is the same everywhere: a single number is set once, never tested against what similar work has cost before, and then quietly re-based as reality arrives.
@@ -102,7 +103,7 @@ Pilots are sized to start small and prove value on one budget cycle before a lar
 
 - **Trust in AI.** On October 5, 2026 the NYC Council held a special hearing on AI risks with testimony from frontier AI companies and whistleblowers. Councils will reject a black box. Baseline's answer is sources on every number, ranges instead of point estimates, and AI as an optional layer over cited facts.
 - **Data quality.** The city's capital data is incomplete (under half of project IDs on the dashboard), uses inconsistent IDs, and mixes all funds with city funds. Mid-year budget increases can reflect new grants rather than under-budgeting. Baseline flags these limits instead of hiding them.
-- **Forecast accuracy.** The 2023 reference projects were mostly still under way, so their overruns are a floor. We need to backtest on completed projects before claiming accuracy.
+- **Forecast accuracy.** An out-of-sample backtest (trained on the April 2019 data, tested on 497 projects created later and since finished) shows the ranges are well calibrated: 45% of final costs landed at or below P50, 85% at or below P80 and 93% at or below P90. The test leans toward shorter projects, so long megaprojects need their own validation.
 - **Politics.** A tool seen as the Council's weapon will not be bought by the Mayor's office, and the reverse. Both workspaces must run on identical numbers.
 - **Sales cycles and incumbents.** Government procurement is slow, and suite vendors can bundle AI features. Starting with low-cost pilots and the council side, where incumbents are weakest, reduces both risks.
 
