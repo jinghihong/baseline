@@ -312,13 +312,13 @@ export function RankedBars({
             type={onSelect ? "button" : undefined}
             onClick={onSelect ? () => onSelect(r.id) : undefined}
             className={cn(
-              "group grid grid-cols-[minmax(0,1fr)_minmax(0,1.4fr)_auto] items-center gap-3 rounded-md px-2 py-1.5 text-left text-[13px]",
+              "group grid grid-cols-[minmax(0,1.15fr)_minmax(0,1fr)_auto] items-center gap-3 rounded-md px-2 py-1.5 text-left text-[13px]",
               onSelect && "hover:bg-surface-2",
               selected === r.id && "bg-surface-2",
             )}
           >
             <span className="min-w-0">
-              <span className="block truncate font-medium text-ink">{r.label}</span>
+              <span className="line-clamp-2 block leading-snug font-medium break-words text-ink">{r.label}</span>
               {r.sublabel && <span className="block truncate text-[12px] text-ink-3">{r.sublabel}</span>}
             </span>
             <span className="h-2.5 w-full rounded-full bg-surface-3">
