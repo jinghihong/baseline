@@ -6,6 +6,7 @@ import { NAV_BY_ROLE, ROLE_LABEL } from "../../app/nav";
 import { useDataset } from "../../data/load";
 import { timeAgo } from "../../lib/format";
 import { applyTheme, setRole, updateWorkspace, useWorkspace, type Role } from "../../state/store";
+import { ErrorBoundary } from "../ErrorBoundary";
 import { Logo } from "../Logo";
 import { Badge, cn, Kbd, LoadingBlock, Segmented, Toaster } from "../ui";
 import { CommandPalette } from "./CommandPalette";
@@ -85,9 +86,11 @@ export function AppShell() {
           </div>
         </header>
         <main id="main" className="mx-auto w-full max-w-[1280px] flex-1 px-4 py-6 sm:px-6 lg:px-8 lg:py-8">
-          <Suspense fallback={<LoadingBlock label="Loading…" />}>
-            <Outlet />
-          </Suspense>
+          <ErrorBoundary resetKey={location.pathname}>
+            <Suspense fallback={<LoadingBlock label="Loading…" />}>
+              <Outlet />
+            </Suspense>
+          </ErrorBoundary>
         </main>
       </div>
       <CommandPalette open={paletteOpen} onClose={() => setPaletteOpen(false)} />
