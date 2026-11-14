@@ -131,6 +131,11 @@ export async function buildDashboard() {
     sched.get(k).push(s);
   }
 
+  // One FMS budget ID can be reused across several projects (the Comptroller's "Flying Blind" report calls this
+  // out). Mark those so totals count each budget once.
+  const idCount = new Map();
+  for (const r of current) if (num(r.total_budget) > 0) idCount.set(r.fms_id, (idCount.get(r.fms_id) ?? 0) + 1);
+
   const projects = [];
   for (const r of current) {
     const budget = num(r.total_budget);
@@ -176,6 +181,7 @@ export async function buildDashboard() {
       slipDays: dayDiff(firstForecast, lastForecast),
       constructionStart: isoDay(r.actual_construction_start),
       reasons,
+      shared: (idCount.get(r.fms_id) ?? 1) > 1 ? idCount.get(r.fms_id) : undefined,
       series: series.length > 1 ? series : undefined,
     });
   }
@@ -187,7 +193,7 @@ export async function buildDashboard() {
       firstPeriod: allPeriods[0],
       periods: allPeriods,
       note:
-        "Budget and completion dates as first reported in the Capital Projects Dashboard compared with the latest report. Baseline never rebases: the first number the city published stays the baseline.",
+        "Budget and completion dates as first reported in the Capital Projects Dashboard compared with the latest report. Baseline never rebases: the first number the city published stays the baseline. `shared` = number of projects that report the same FMS budget ID; count that budget once in totals.",
       sources: [
         source("fb86-vt7u", "Capital Projects Dashboard - Citywide Budget and Schedule"),
         source("95tx-snak", "Capital Projects Dashboard - Citywide Schedule History and Variance"),

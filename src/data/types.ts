@@ -102,6 +102,8 @@ export interface CapitalProject {
   slipDays: number | null;
   constructionStart: string | null;
   reasons: Record<string, number>;
+  /** Number of projects that report this same FMS budget ID (only set when more than one). Count the budget once. */
+  shared?: number;
   /** [reporting period "YYYYMM", total budget] at each change. */
   series?: [string, number][];
 }

@@ -23,7 +23,7 @@ import {
 import { agencyName } from "../../data/agencies";
 import { AIMS_FACTS, FY27_COMPTROLLER_GAP, FY27_OMB_GAP } from "../../data/curated";
 import { useDatasets } from "../../data/load";
-import { assessAllLines, assessAllOvertime, assessAllProjects, summarizeCapital } from "../../engines/core";
+import { assessAllLines, assessAllOvertime, assessAllProjects, summarizeCapital, uniqueBudgets } from "../../engines/core";
 import { date, duration, fy, money, num, pct } from "../../lib/format";
 import { useWorkspace, type Role } from "../../state/store";
 
@@ -73,8 +73,9 @@ export default function Home() {
       .map((y) => ({ fy: y.fy, adopted: y.adopted || null, actual: y.actual || null }));
 
     // Growth by agency since first report.
+    const distinct = uniqueBudgets(projects);
     const growthByAgency = new Map<string, number>();
-    for (const p of projects) if (p.growth > 0) growthByAgency.set(p.project.agency, (growthByAgency.get(p.project.agency) ?? 0) + p.growth);
+    for (const p of distinct) if (p.growth > 0) growthByAgency.set(p.project.agency, (growthByAgency.get(p.project.agency) ?? 0) + p.growth);
     const growthRows = [...growthByAgency.entries()]
       .sort((a, b) => b[1] - a[1])
       .slice(0, 7)
@@ -91,7 +92,8 @@ export default function Home() {
         to: "/app/overtime",
       });
     }
-    for (const p of [...projects].sort((a, b) => b.growth - a.growth).slice(0, 4)) {
+    // Projects whose first budget was tiny usually had only design money at first report; rank by dollars but skip those.
+    for (const p of [...distinct].filter((a) => (a.project.firstBudget ?? 0) >= 25e6).sort((a, b) => b.growth - a.growth).slice(0, 4)) {
       alerts.push({
         id: `cap-${p.project.id}`,
         kind: "Capital",
@@ -142,14 +144,14 @@ export default function Home() {
             <Stat
               label="Capital budgets since first report"
               value={money(model.capital.totalGrowth, { sign: true })}
-              detail={`${num(model.capital.grownCount)} of ${num(model.capital.projects)} projects grew`}
+              detail={`${num(model.capital.grownCount)} of ${num(model.capital.budgetIds)} project budgets grew`}
               tone="bad"
               source={<SourceNote>Capital Projects Dashboard</SourceNote>}
             />
             <Stat
-              label="Projects 20%+ over first budget"
+              label="Project budgets 20%+ over first report"
               value={num(model.capital.over20Count)}
-              detail={`${pct(model.capital.over20Count / model.capital.projects)} of tracked projects`}
+              detail={`${pct(model.capital.over20Count / model.capital.budgetIds)} of tracked budgets`}
               tone="serious"
             />
             <Stat

@@ -56,7 +56,7 @@ Short version (full detail on the in-app Methodology page and in [`docs/methodol
 
 - **Capital cost:** reference-class forecasting. Similar past projects (same asset class, weighted by size, agency and borough) give a distribution of final cost ÷ original budget. Your estimate × that distribution = P50/P80/P90.
 - **Overtime:** damped-trend smoothing of actual overtime paid, compared with the adopted budget.
-- **Under-budgeted lines:** each agency × object class is compared adopted vs modified over up to eight years; lines that end the year 10%+ above adoption in most years are flagged.
+- **Under-budgeted lines:** each agency × object class is compared adopted vs modified over up to eight years; a line is flagged as chronic when it ends the year above adoption in at least 3 of every 4 years (5+ years of history), by a median of 20% or more.
 - **311 demand:** seasonal index + linear trend with an 80% band.
 - **Maintenance:** risk = probability of failure × consequence; a greedy optimizer funds the most risk reduction per dollar.
 
@@ -104,6 +104,7 @@ Every push to `main` runs type-checks and tests, builds, and deploys to GitHub P
 
 - The expense budget data is all funds. In-year modifications include state and federal grants recognized during the year, so a line that grows is not always under-budgeted. Overtime (actual payroll) is the cleanest signal.
 - Many capital projects in the reference data are mid-life; their final costs may grow further.
+- The city sometimes reports one budget ID for several projects. Baseline marks those as shared and counts each budget once in totals.
 - The maintenance screen ships with a clearly labeled sample asset register until a city imports its own.
 
 ## License

@@ -51,7 +51,9 @@ export function assessLine(line: BudgetLine, window = 8): LineAssessment {
   const yearsOver = complete.filter((y) => y.ratio >= 1.05).length;
   const last = complete.at(-1);
   const technical = TECHNICAL_CLASSES.has(line.objectClass);
-  const chronic = !technical && complete.length >= 4 && yearsOver / complete.length >= 0.6 && medianRatio >= 1.1;
+  // Calibrated on NYC data: 5+ years of history, above adoption in 3 of every 4 years, by a median of 20%+.
+  // Looser thresholds mostly catch grant money recognized mid-year rather than lines set too low.
+  const chronic = !technical && complete.length >= 5 && yearsOver / complete.length >= 0.75 && medianRatio >= 1.2;
   const expectedIncrease = Math.max(0, latestAdopted * (medianRatio - 1));
   let level: RiskLevel = "low";
   if (!technical && complete.length >= 3) {
@@ -153,6 +155,8 @@ export interface ProjectAssessment {
   level: RiskLevel;
   flags: string[];
   topReason: string | null;
+  /** The budget is an FMS ID shared with other projects; count its dollars once. */
+  sharedBudget: boolean;
 }
 
 export function assessProject(p: CapitalProject): ProjectAssessment {
@@ -169,11 +173,26 @@ export function assessProject(p: CapitalProject): ProjectAssessment {
   if (growthPct >= 0.5 || slipDays >= 730) level = "critical";
   else if (growthPct >= 0.2 || slipDays >= 365) level = "high";
   else if (growthPct >= 0.05 || slipDays >= 90) level = "watch";
-  return { project: p, growth, growthPct, slipDays, level, flags, topReason: reasons[0]?.[0] ?? null };
+  const sharedBudget = (p.shared ?? 1) > 1;
+  if (sharedBudget) flags.push(`Budget ID shared by ${p.shared} projects`);
+  return { project: p, growth, growthPct, slipDays, level, flags, topReason: reasons[0]?.[0] ?? null, sharedBudget };
+}
+
+/** Keep one project per FMS budget ID, so dollar totals don't double count shared budgets. */
+export function uniqueBudgets(items: ProjectAssessment[]): ProjectAssessment[] {
+  const seen = new Set<string>();
+  return items.filter((a) => {
+    const key = a.project.fmsId || a.project.id;
+    if (seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  });
 }
 
 export interface CapitalSummary {
   projects: number;
+  /** Distinct FMS budget IDs among the projects. Dollar totals and growth counts are per budget ID. */
+  budgetIds: number;
   totalBudget: number;
   totalFirstBudget: number;
   totalGrowth: number;
@@ -196,12 +215,18 @@ export function summarizeCapital(items: ProjectAssessment[]): CapitalSummary {
   let slipped = 0;
   let withSchedule = 0;
   const slips: number[] = [];
+  const seenBudgets = new Set<string>();
   for (const a of items) {
     byLevel[a.level]++;
-    totalBudget += a.project.budget;
-    totalFirst += a.project.firstBudget ?? a.project.budget;
-    if (a.growthPct > 0.001) grown++;
-    if (a.growthPct >= 0.2) over20++;
+    const budgetKey = a.project.fmsId || a.project.id;
+    if (!seenBudgets.has(budgetKey)) {
+      // Money and growth counts are per budget ID; a shared ID is counted once.
+      seenBudgets.add(budgetKey);
+      totalBudget += a.project.budget;
+      totalFirst += a.project.firstBudget ?? a.project.budget;
+      if (a.growthPct > 0.001) grown++;
+      if (a.growthPct >= 0.2) over20++;
+    }
     if (a.project.firstForecast) {
       withSchedule++;
       if (a.slipDays > 0) {
@@ -213,6 +238,7 @@ export function summarizeCapital(items: ProjectAssessment[]): CapitalSummary {
   }
   return {
     projects: items.length,
+    budgetIds: seenBudgets.size,
     totalBudget,
     totalFirstBudget: totalFirst,
     totalGrowth: totalBudget - totalFirst,
@@ -256,7 +282,7 @@ export function buildAgencyFacts(input: { overtime?: OvertimeData | null; capita
     for (const [code, list] of byAgency) {
       const f = get(code);
       f.capital = summarizeCapital(list);
-      f.worstProjects = [...list].sort((x, y) => y.growth - x.growth).slice(0, 8);
+      f.worstProjects = uniqueBudgets([...list].sort((x, y) => y.growth - x.growth)).slice(0, 8);
     }
   }
   if (input.budgetLines) {
