@@ -14,6 +14,26 @@ const THEMES = [
   { id: "workforce", label: "Workforce & economic development", keywords: ["workforce development", "economic development", "brownfields", "small business"], classes: ["land"] },
 ];
 
+// Title patterns decide a grant's themes. Full-text search hits alone are noisy (a health research grant can
+// match "water"), so search themes are only a fallback when the title matches nothing.
+const TITLE_THEME = {
+  transportation: /transport|transit|bridge|highway|\broads?\b|street|traffic|\brail|\bbus(es)?\b|bicycl|pedestrian|mobility|airport|safe streets|vehicle/i,
+  water: /water|sewer|storm ?water|drinking|lead service|irrigation/i,
+  resilience: /resilien|hazard|mitigation|flood|disaster|climate|wildfire|hurricane|\bBRIC\b/i,
+  housing: /housing|homeless|community development|lead hazard|\bCDBG\b|neighborhood|\brent/i,
+  energy: /energy|electric|decarboni|solar|efficien|clean|emission|\bEV\b|charging/i,
+  safety: /law enforcement|police|policing|public safety|justice|crime|violence|court|correction|prosecut|firefight|\bfire\b|emergency|\b911\b|victim|security/i,
+  health: /health|opioid|substance|overdose|mental|child ?care|maternal|\bHIV\b|disease|nutrition|medical/i,
+  parks: /\bparks?\b|recreation|forest|\btrees?\b|librar|\barts?\b|museum|humanities|historic|outdoor/i,
+  digital: /broadband|cyber|digital|\bdata\b|technology|internet/i,
+  workforce: /workforce|\bjobs?\b|employment|apprentice|economic development|brownfield|small business|training/i,
+};
+
+function themesFor(title, searchThemes) {
+  const fromTitle = Object.keys(TITLE_THEME).filter((id) => TITLE_THEME[id].test(title));
+  return fromTitle.length ? { themes: fromTitle, titleMatch: true } : { themes: [], titleMatch: false, searchThemes };
+}
+
 async function search(keyword) {
   for (let i = 0; i < 4; i++) {
     try {
@@ -69,6 +89,7 @@ export async function buildGrants() {
     }
     console.log(`  ✓ ${theme.id}: ${byId.size} unique so far`);
   }
+  for (const o of byId.values()) Object.assign(o, themesFor(o.title, o.themes));
   const today = new Date().toISOString().slice(0, 10);
   const opportunities = [...byId.values()]
     .filter((o) => !o.closeDate || o.closeDate >= today)
@@ -76,7 +97,7 @@ export async function buildGrants() {
   writeJson("grants.json", {
     meta: {
       fetchedAt: new Date().toISOString(),
-      note: "Posted and forecasted federal opportunities where city or township governments are eligible.",
+      note: "Posted and forecasted federal opportunities where city or township governments are eligible. Themes come from the title. Grants whose title matches no theme have themes=[] (searchThemes keeps the noisy full-text hits).",
       sources: [{ id: "grants-gov", title: "Grants.gov Search2 API", url: "https://www.grants.gov/api", publisher: "Grants.gov" }],
       themes: THEMES.map(({ id, label, classes }) => ({ id, label, classes })),
     },

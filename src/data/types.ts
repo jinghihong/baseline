@@ -154,6 +154,8 @@ export interface GrantOpportunity {
   closeDate: string | null;
   aln: string[];
   themes: string[];
+  /** True when the themes came from the title, false when only from a full-text search hit (less reliable). */
+  titleMatch?: boolean;
   url: string;
 }
 export interface GrantTheme {
