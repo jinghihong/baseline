@@ -451,6 +451,7 @@ export function Toggle({ checked, onChange, label }: { checked: boolean; onChang
         type="button"
         role="switch"
         aria-checked={checked}
+        aria-label={typeof label === "string" ? label : undefined}
         onClick={() => onChange(!checked)}
         className={cn("relative h-5 w-9 rounded-full transition-colors", checked ? "bg-brand" : "bg-surface-3")}
       >

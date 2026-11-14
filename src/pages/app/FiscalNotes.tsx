@@ -104,6 +104,7 @@ export default function FiscalNotes() {
             key={t.id}
             size="sm"
             title={t.description}
+            aria-label={`Start from the ${t.name} template`}
             onClick={() => {
               setInput(t.build());
               setDraftId(null);
