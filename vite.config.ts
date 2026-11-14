@@ -12,9 +12,10 @@ export default defineConfig({
     chunkSizeWarningLimit: 900,
     rollupOptions: {
       output: {
+        // Only React is pinned to its own long-cached chunk. Charts, the Anthropic SDK and CSV parsing are
+        // imported by lazy routes, so the bundler keeps them out of the first page load.
         manualChunks(id) {
-          if (id.includes("node_modules/recharts") || id.includes("node_modules/d3-")) return "charts";
-          if (id.includes("node_modules/react") || id.includes("node_modules/scheduler")) return "react";
+          if (/node_modules\/(react|react-dom|scheduler)\//.test(id)) return "react";
         },
       },
     },

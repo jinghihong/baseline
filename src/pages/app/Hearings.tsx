@@ -139,7 +139,7 @@ export default function Hearings() {
         </div>
       </Section>
 
-      <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_340px]">
+      <div className="grid grid-cols-1 gap-6 lg:grid-cols-[minmax(0,1fr)_340px]">
         <Section title={`${brief.questions.length} questions to ask`} description="Ranked by how large and how well documented the gap is.">
           <ol className="flex flex-col gap-3">
             {brief.questions.map((q, i) => (

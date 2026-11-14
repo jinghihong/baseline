@@ -11,6 +11,11 @@ Every number on screen links to its source. Forecasts are built from what simila
 
 **Live app:** https://jinghihong.github.io/baseline/
 
+| | |
+|---|---|
+| ![Landing page](docs/screenshots/landing.jpg) | ![Budget office briefing](docs/screenshots/home.jpg) |
+| ![Cost forecaster pricing the Riverside Park bridge](docs/screenshots/forecaster.jpg) | ![Hearing prep for the NYPD](docs/screenshots/hearing-prep.jpg) |
+
 ---
 
 ## Why this exists

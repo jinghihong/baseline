@@ -21,7 +21,7 @@ export default function Settings() {
   return (
     <>
       <PageHeader eyebrow="Workspace" title="Settings" description="Your workspace, appearance and optional AI connection. Settings are saved in this browser." />
-      <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_340px]">
+      <div className="grid grid-cols-1 gap-6 lg:grid-cols-[minmax(0,1fr)_340px]">
         <div className="space-y-6">
           <Card>
             <CardHeader title="Workspace" subtitle="Both workspaces use the same data. The role changes what Home shows and how tools are grouped." />

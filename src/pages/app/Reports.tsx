@@ -37,7 +37,7 @@ export default function Reports() {
         title="Reports"
         description="Printable briefs for meetings, hearings and memos. Each one lists its sources and labels Baseline's estimates."
       />
-      <div className="grid gap-6 lg:grid-cols-[300px_minmax(0,1fr)]">
+      <div className="grid grid-cols-1 gap-6 lg:grid-cols-[300px_minmax(0,1fr)]">
         <div className="no-print space-y-2">
           {REPORTS.map((r) => (
             <button

@@ -143,7 +143,7 @@ export default function Forecaster() {
         }
       />
 
-      <div className="grid gap-6 lg:grid-cols-[340px_minmax(0,1fr)]">
+      <div className="grid grid-cols-1 gap-6 lg:grid-cols-[340px_minmax(0,1fr)]">
         <Card className="no-print h-fit lg:sticky lg:top-20">
           <CardHeader title="Your project" subtitle="Change any field and the forecast updates." />
           <CardBody className="flex flex-col gap-4">

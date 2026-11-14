@@ -177,7 +177,7 @@ function AimsStory() {
         </>
       }
     >
-      <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)]">
+      <div className="grid grid-cols-1 gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)]">
         <div className="grid gap-3">
           {[
             { k: `${AIMS_FACTS.surveyMinutes.fdnyMinutes} minutes`, v: `to survey a ${num(AIMS_FACTS.surveyMinutes.fdnySqft)} sq ft FDNY building. Inspections are quick visual checks.` },

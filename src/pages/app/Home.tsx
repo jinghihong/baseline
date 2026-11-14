@@ -194,7 +194,7 @@ export default function Home() {
         )}
       </StatGrid>
 
-      <div className="mt-8 grid gap-6 lg:grid-cols-[minmax(0,1.35fr)_minmax(0,1fr)]">
+      <div className="mt-8 grid grid-cols-1 gap-6 lg:grid-cols-[minmax(0,1.35fr)_minmax(0,1fr)]">
         <Card>
           <CardHeader title="Needs attention" subtitle="Ranked by risk level. Every item links to the evidence." />
           <ul className="divide-y divide-line">

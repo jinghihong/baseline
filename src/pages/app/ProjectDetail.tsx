@@ -163,7 +163,7 @@ export default function ProjectDetail() {
         </Callout>
       )}
 
-      <div className="mt-6 grid gap-4 lg:grid-cols-[minmax(0,1.6fr)_minmax(0,1fr)]">
+      <div className="mt-6 grid grid-cols-1 gap-4 lg:grid-cols-[minmax(0,1.6fr)_minmax(0,1fr)]">
         <Card>
           <CardHeader title="Budget history" subtitle="Total budget in each dashboard report. The first report is the baseline." />
           <CardBody>

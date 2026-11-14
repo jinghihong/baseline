@@ -118,7 +118,7 @@ export default function Debt() {
         OMB's FY2027 forecast of {money(BUDGET_FACTS.fy27OmbTax)}. <Cite id="fy27Adopted" />
       </Callout>
 
-      <div className="grid gap-6 lg:grid-cols-[360px_minmax(0,1fr)]">
+      <div className="grid grid-cols-1 gap-6 lg:grid-cols-[360px_minmax(0,1fr)]">
         <Card className="h-fit">
           <CardHeader title="Assumptions" />
           <CardBody className="flex flex-col gap-5">

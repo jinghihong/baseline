@@ -104,7 +104,7 @@ export default function Demand() {
         </Callout>
       )}
 
-      <div className="mt-6 grid gap-6 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.6fr)]">
+      <div className="mt-6 grid grid-cols-1 gap-6 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.6fr)]">
         <Card>
           <CardHeader title="Complaint types" subtitle="Last 12 months · click to see the trend" />
           <ul className="max-h-[560px] divide-y divide-line overflow-y-auto">
