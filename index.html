@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Baseline: budget and capital forecasting for cities</title>
+    <meta
+      name="description"
+      content="Baseline gives city budget offices and city councils one set of numbers they can trust: honest capital cost forecasts, early warnings on under-budgeted lines, and data-backed hearing prep."
+    />
+    <meta property="og:title" content="Baseline: budget and capital forecasting for cities" />
+    <meta
+      property="og:description"
+      content="Independent forecasts for city budgets and capital projects, built on the city's own data. Every number shows its source."
+    />
+    <meta property="og:type" content="website" />
+    <meta name="theme-color" content="#0f172a" />
+    <link rel="icon" type="image/svg+xml" href="%BASE_URL%favicon.svg" />
+    <script>
+      // Apply the saved theme before first paint to avoid a flash.
+      try {
+        const t = localStorage.getItem("baseline:theme");
+        const dark = t ? t === "dark" : window.matchMedia("(prefers-color-scheme: dark)").matches;
+        document.documentElement.classList.toggle("dark", dark);
+      } catch {}
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <noscript>Baseline needs JavaScript to run.</noscript>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
